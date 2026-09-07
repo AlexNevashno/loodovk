@@ -150,7 +150,6 @@ input{outline:none}
 .item .sell:hover{color:var(--gold);border-color:rgba(255,210,30,.45)}
 .empty{padding:40px 16px;text-align:center;color:var(--dim);font-size:13px}
 .empty b{display:block;color:var(--txt);font-family:var(--disp);font-size:15px;margin-bottom:6px}
-.bonus{margin-top:14px;padding:10px 18px;border-radius:10px;background:linear-gradient(180deg,#ffd94a,#eea00e);color:#1c1400;font-weight:700;font-size:13px}
 .total{margin-left:auto;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
 .total b{color:var(--txt)}
 
@@ -879,7 +878,7 @@ function renderInv(){
   if(tab==='shop')return renderStore(g);
   if(!S.inv.length){
     g.innerHTML='<div class="empty" style="grid-column:1/-1"><b>Инвентарь пуст</b>Всё ушло в апгрейд.'+
-      (S.bal<1?'<br><button class="bonus" id="bonus">Получить 10 000 монет</button>':'')+'</div>';
+      (S.bal<1?'<br>Загляните на ферму — монеты там капают сами.':'')+'</div>';
     return}
   g.innerHTML=S.inv.slice().sort(function(a,b){return it(b).price-it(a).price})
     .map(function(u){return card(it(u),{sel:sel.has(u.u),uid:u.u})}).join('');
@@ -1015,7 +1014,6 @@ function spin(){
 
 /* ---------- events ---------- */
 $('#inv').addEventListener('click',function(e){
-  if(e.target.id==='bonus'){S.bal+=10000;render();return}
   var sb=e.target.closest('[data-sell]');
   if(sb){var u=+sb.dataset.sell;var f=S.inv.filter(function(x){return x.u===u})[0];
     if(f){S.bal+=it(f).price;S.inv=S.inv.filter(function(x){return x.u!==u});sel.delete(u);render()}
@@ -1151,16 +1149,31 @@ function isAdmin(){
   if(!embedded&&!S.auth.real)return false;
   return String(S.auth.nick).toLowerCase()===ADMIN;
 }
-function ovkApi(method,params){
+function ovkCall(method,params,extra){
   var q=[];
   for(var k in params)q.push(encodeURIComponent(k)+'='+encodeURIComponent(params[k]));
   q.push('v=5.131');
+  if(extra)q.push(extra);
   return fetch(OVK+'/method/'+method+'?'+q.join('&')).then(function(r){return r.json()});
 }
-function grabToken(){
-  var src=String(location.hash||'').replace(/^#/,'')+'&'+String(location.search||'').replace(/^\?/,'');
-  var m=/(?:^|&)access_token=([^&]+)/.exec(src);
-  return m?decodeURIComponent(m[1]):null;
+function ovkApi(method,params){
+  return ovkCall(method,params).catch(function(e){
+    /* OpenVK собирает Access-Control-Allow-Origin как схема://хост и теряет порт.
+       Для нестандартного порта его возвращает requestPort — но если браузер не шлёт
+       Referer, тот же параметр портит заголовок до "*:порт". Поэтому только повтором. */
+    if(!location.port)throw e;
+    return ovkCall(method,params,'requestPort='+encodeURIComponent(location.port));
+  });
+}
+/* OpenVK возвращает параметры в query: ?access_token=..&expires_in=0&user_id=..
+   при отказе: ?error=access_denied&error_reason=..&error_description=.. */
+function grabAuth(){
+  var q=String(location.search||'').replace(/^\?/,'')+'&'+String(location.hash||'').replace(/^#/,'');
+  function get(k){
+    var m=new RegExp('(?:^|&)'+k+'=([^&]*)').exec(q);
+    return m?decodeURIComponent(m[1].replace(/\+/g,' ')):null;
+  }
+  return {token:get('access_token'),uid:get('user_id'),err:get('error'),desc:get('error_description')};
 }
 function cleanUrl(){
   try{history.replaceState(null,'',location.pathname)}catch(e){}
@@ -1170,18 +1183,25 @@ function startOauth(){
   location.href=OVK+'/authorize?client_name='+encodeURIComponent('ludOVK')+
     '&redirect_uri='+encodeURIComponent(back)+'&display=page&response_type=token&revoke=0';
 }
+function gMsg(text,ok){
+  var e=$('#gErr');e.style.color=ok?'var(--muted)':'';e.textContent=text;
+}
 function loginWithToken(tok){
-  $('#gErr').textContent='Проверяю токен на openvk.org…';
-  ovkApi('users.get',{access_token:tok,fields:'screen_name,photo_200'}).then(function(res){
-    var u=res&&res.response&&res.response[0];
-    if(!u||!u.id)throw new Error('bad');
+  gMsg('Проверяю токен на openvk.org…',true);
+  /* account.getProfileInfo требует валидный токен и сам говорит, чей он —
+     users.get без user_ids в OpenVK возвращает пустой массив */
+  ovkApi('account.getProfileInfo',{access_token:tok}).then(function(res){
+    if(res&&res.error_code)throw {msg:res.error_msg||('код '+res.error_code)};
+    var u=res&&res.response;
+    if(!u||!u.id)throw {msg:'неожиданный ответ, в нём нет профиля'};
     S.tok=tok;
     S.auth={nick:u.screen_name||('id'+u.id),id:u.id,ovk:true,real:true,
             name:((u.first_name||'')+' '+(u.last_name||'')).trim(),photo:u.photo_200||null};
     save();$('#gate').hidden=true;renderAcct();
-    toast('Вход выполнен: '+esc(S.auth.name||S.auth.nick)+(isAdmin()?'. Админка открыта.':''));
-  }).catch(function(){
-    $('#gErr').textContent='OpenVK не ответил — токен не подошёл или запросы к openvk.org отсюда заблокированы';
+    toast('Вход выполнен: '+esc(S.auth.name||S.auth.nick)+(isAdmin()?'. Админка открыта — иконка щита.':''));
+  }).catch(function(e){
+    gMsg(e&&e.msg?('OpenVK ответил: '+e.msg)
+      :'Не удалось связаться с openvk.org. Страница должна быть открыта по https с сайта, а не файлом с диска.');
   });
 }
 function ovkUrl(nick){return 'https://openvk.org/'+encodeURIComponent(nick)}
@@ -1196,8 +1216,9 @@ function renderAcct(){
        '<span class="nick">'+esc(a.nick)+'</span>')+
     (isAdmin()?'<span class="badge-admin">админ</span>':'')+
     '<div class="bal"><svg class="coin" viewBox="0 0 24 24"><use href="#coin"></use></svg><b id="balv">'+fmt(S.bal)+'</b></div>'+
-    '<button class="topup" id="topup" title="Добавить 10 000 демо-монет">+</button>';
-  $('#topup').onclick=function(){S.bal+=10000;sBuy();renderBal();renderInv();renderWheel();save()};
+    (isAdmin()?'<button class="topup" id="topup" title="Админское пополнение: 10 000 монет">+</button>':'');
+  var tu=$('#topup');
+  if(tu)tu.onclick=function(){S.bal+=10000;sBuy();renderBal();renderInv();renderWheel();save()};
   $('#tAdmin').hidden=!isAdmin();
 }
 function parseNick(v){
@@ -1207,17 +1228,20 @@ function parseNick(v){
   v=v.replace(/^@/,'').replace(/^\/+/,'').replace(/\/+$/,'');
   return /^[A-Za-z0-9_.\-]{2,32}$/.test(v)?v:null;
 }
-function openGate(){
-  $('#gErr').textContent='';
-  $('#gNick').value=(S.auth&&S.auth.ovk)?S.auth.nick:'';
+function setupGate(){
   $('#gOauthWrap').hidden=embedded;
   $('#gManual').open=embedded;
+}
+function openGate(){
+  gMsg('',true);
+  $('#gNick').value=(S.auth&&S.auth.ovk&&!S.auth.real)?S.auth.nick:'';
+  setupGate();
   $('#gate').hidden=false;
   if(embedded)setTimeout(function(){$('#gNick').focus()},50);
 }
 function doLogin(){
   var nick=parseNick($('#gNick').value);
-  if(!nick){$('#gErr').textContent='Ник из латиницы, цифр, точки, дефиса или подчёркивания — от 2 до 32 символов';return}
+  if(!nick){gMsg('Ник из латиницы, цифр, точки, дефиса или подчёркивания — от 2 до 32 символов');return}
   S.auth={nick:nick,ovk:true};save();
   $('#gate').hidden=true;renderAcct();
   toast('С возвращением, '+esc(nick)+(isAdmin()?'. Админка открыта — иконка щита.':''));
@@ -1226,7 +1250,7 @@ $('#gGo').addEventListener('click',doLogin);
 $('#gOauth').addEventListener('click',startOauth);
 $('#gNote').innerHTML=embedded
   ?'Настоящая авторизация OpenVK здесь невозможна: страница открыта внутри песочницы claude.ai, а она блокирует и переход на openvk.org/authorize, и вызовы к API. Ник ниже — просто подпись профиля и ссылка на вашу страницу, паролей она не спрашивает.<br><br>Файл этой страницы работает и на своём хостинге — там кнопка настоящего входа включается сама.'
-  :'Откроется openvk.org/authorize — пароль вы вводите на самом OpenVK, страница получит только токен. Токен хранится в вашем браузере и уходит исключительно на openvk.org.';
+  :'Откроется openvk.org/authorize — пароль вы вводите на самом OpenVK, сюда вернётся только токен. Он хранится в вашем браузере и уходит исключительно на openvk.org. Работает, когда страница открыта с сайта по https.';
 $('#gNick').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin()});
 $('#gGuest').addEventListener('click',function(){
   S.auth={nick:'Гость',ovk:false};save();$('#gate').hidden=true;renderAcct();
@@ -1410,8 +1434,16 @@ setInterval(function(){
 window.addEventListener('beforeunload',function(){S.farm.last=Date.now();save()});
 renderAcct();
 (function(){
-  var t=grabToken();
-  if(t&&!embedded){cleanUrl();$('#gate').hidden=false;loginWithToken(t);return}
+  var a=grabAuth();
+  if(!embedded&&(a.token||a.err)){
+    cleanUrl();setupGate();$('#gate').hidden=false;
+    if(a.err){
+      gMsg(a.err==='access_denied'
+        ?'Доступ не выдан — на openvk.org была нажата «Отклонить»'
+        :('OpenVK ответил: '+(a.desc||a.err)));
+      return}
+    loginWithToken(a.token);
+    return}
   if(!S.auth)openGate();
 })();
 $('#tSound').classList.toggle('on',!!S.sound);
