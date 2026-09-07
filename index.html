@@ -184,13 +184,45 @@ input{outline:none}
 ::-webkit-scrollbar-thumb:hover{background:#3b3b45}
 
 @media (max-width:1100px){
-  .stage{grid-template-columns:1fr}
-  .card{min-height:0}
-  .wheel{max-width:330px}
-  .lists{grid-template-columns:1fr}
+  .wrap{padding:12px 12px 48px}
+  /* колесо наверх во всю ширину, отдаём и получаем — двумя колонками под ним */
+  .stage{grid-template-columns:1fr 1fr;gap:14px}
+  .mid{grid-column:1/-1;order:-1}
+  .wheel{max-width:300px}
+  .card{min-height:0;padding:14px;border-radius:15px}
+  .card-h h2{font-size:13.5px}
+  .card-h p{font-size:11px;margin-top:3px}
+  .card-body{padding:6px 0}
+  .ghost{max-width:170px}
+  .ghost .gc svg{width:52px;height:52px}
+  .picked .wep{max-width:190px}
+  .picked .pname{font-size:15px}
+  .chips{max-height:180px;grid-template-columns:repeat(auto-fill,minmax(72px,1fr))}
+  .go{margin-top:14px;padding:14px;font-size:15.5px}
+  .hint{font-size:11.5px}
+  .lists{grid-template-columns:1fr;gap:14px;margin-top:18px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:8px}
+  .body{max-height:430px;padding:12px}
   .acct{position:static;order:2}
-  .top{flex-wrap:wrap;justify-content:center}
+  .top{flex-wrap:wrap;justify-content:center;gap:10px;padding-bottom:6px}
   .brand{margin:0 auto;order:1;width:100%;justify-content:center}
+  .tools{flex-wrap:wrap;justify-content:center;margin:2px 0 12px}
+  .note{width:100%;margin-left:0;text-align:center;order:9}
+  .phead{padding:12px}
+}
+@media (max-width:620px){
+  .stage{grid-template-columns:1fr}
+  .wheel{max-width:250px}
+  .mult{font-size:31px}
+  .chance{font-size:11.5px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(98px,1fr))}
+  .item .name{font-size:11.5px}
+  .item .cat{font-size:9px}
+  .wordmark{font-size:19px}
+  .agrid{grid-template-columns:1fr}
+  .srch input{width:88px}
+  .srch.num input{width:52px}
+  .tab{padding:7px 9px;font-size:11.5px}
 }
 [hidden]{display:none!important}
 .tabs{display:flex;gap:3px;background:#0f0f11;border:1px solid var(--line);border-radius:11px;padding:3px}
@@ -205,7 +237,25 @@ input{outline:none}
 .item.poor{opacity:.42}
 .item.poor .buy{background:none;border-color:var(--line-2);color:var(--dim);cursor:not-allowed}
 .item.poor .buy:hover{background:none;color:var(--dim)}
-@media (hover:none){.item .sell{opacity:1;transform:none}}
+@media (hover:none){
+  /* на тач-экранах кнопка видна всегда, поэтому ставим её в поток, а не поверх названия */
+  .item .sell{position:static;opacity:1;transform:none;margin-top:7px}
+}
+
+/* ---------- промокоды ---------- */
+.promoin{display:flex;gap:8px;margin:16px 0 4px}
+.promoin input{flex:1;min-width:0;background:#0e0e10;border:1px solid var(--line);border-radius:11px;
+  padding:12px 13px;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--txt)}
+.promoin input:focus{border-color:rgba(255,210,30,.45)}
+.promoin button{flex:none;padding:0 18px;border-radius:11px;background:linear-gradient(180deg,#ffd94a,#eea00e);
+  color:#1c1400;font-weight:700;font-size:13px}
+.promoin button:hover{filter:brightness(1.07)}
+.pres{min-height:18px;font-size:12.5px;margin-top:4px}
+.pres.ok{color:var(--win)}
+.pres.no{color:#ff6b6b}
+.pused{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:11.5px;color:var(--dim);text-align:left}
+.pused b{color:var(--muted);font-weight:600}
+.padm{margin-top:10px;font-size:12px;color:#4a9ae8;font-weight:600}
 
 /* ---------- вход ---------- */
 .gate{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:20px;
@@ -366,6 +416,7 @@ img.wep{aspect-ratio:200/80;object-fit:contain}
     <button class="tool on" id="tSound" title="Звук"><svg viewBox="0 0 24 24"><use href="#i-snd"></use></svg></button>
     <button class="tool" id="tFast" title="Быстрая прокрутка"><svg viewBox="0 0 24 24"><use href="#i-bolt"></use></svg></button>
     <button class="tool" id="tAdmin" title="Админка: свои карточки" hidden><svg viewBox="0 0 24 24"><use href="#i-shield"></use></svg></button>
+    <button class="tool" id="tPromo" title="Промокод"><svg viewBox="0 0 24 24"><use href="#i-ticket"></use></svg></button>
     <button class="tool" id="tOut" title="Сменить профиль"><svg viewBox="0 0 24 24"><use href="#i-out"></use></svg></button>
     <div class="note"><b>Симулятор.</b> Монеты и предметы виртуальные, вывода нет.</div>
   </div>
@@ -475,6 +526,7 @@ img.wep{aspect-ratio:200/80;object-fit:contain}
 
 <div class="mask" id="mask"><div class="dlg" id="dlg"></div></div>
 <div class="mask" id="amask"><div class="dlg wide" id="adlg"></div></div>
+<div class="mask" id="pmask"><div class="dlg" id="pdlg"></div></div>
 <div class="toasts" id="toasts"></div>
 <div class="gate" id="gate" hidden>
   <div class="gate-card">
@@ -516,6 +568,7 @@ img.wep{aspect-ratio:200/80;object-fit:contain}
   <symbol id="f-rack" viewBox="0 0 24 24"><path d="M3 3h18v4.6H3zm0 6.7h18v4.6H3zm0 6.7h18v4.6H3z"/></symbol>
   <symbol id="f-quantum" viewBox="0 0 24 24"><path d="M12 1.6 21.2 6.8v10.4L12 22.4 2.8 17.2V6.8zm0 6.6L8.2 10.4v4.4L12 17l3.8-2.2v-4.4z" fill-rule="evenodd"/></symbol>
   <symbol id="f-ovk" viewBox="0 0 24 24"><path d="M5.4 2h13.2A3.4 3.4 0 0122 5.4v13.2a3.4 3.4 0 01-3.4 3.4H5.4A3.4 3.4 0 012 18.6V5.4A3.4 3.4 0 015.4 2zM12 5.9c-3.4 0-5.7 2.4-5.7 6.1s2.3 6.1 5.7 6.1 5.7-2.4 5.7-6.1-2.3-6.1-5.7-6.1zm0 3.3c1.4 0 2.4 1.1 2.4 2.8s-1 2.8-2.4 2.8-2.4-1.1-2.4-2.8 1-2.8 2.4-2.8z" fill-rule="evenodd"/></symbol>
+  <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M2.6 6h18.8A1.6 1.6 0 0123 7.6v2.9a2.4 2.4 0 000 4.8v2.1a1.6 1.6 0 01-1.6 1.6H2.6A1.6 1.6 0 011 17.4v-2.1a2.4 2.4 0 000-4.8V7.6A1.6 1.6 0 012.6 6zm13 2.2h1.6v2h-1.6zm0 3.8h1.6v2h-1.6zm0 3.8h1.6v2h-1.6z" fill-rule="evenodd"/></symbol>
   <symbol id="i-out" viewBox="0 0 24 24"><path d="M11 2H5a2 2 0 00-2 2v16a2 2 0 002 2h6v-2.4H5.4V4.4H11zm4.6 4.3-1.7 1.7 2.6 2.6H8.6v2.4h7.9l-2.6 2.6 1.7 1.7L21 12z"/></symbol>
   <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 1.8 21 5v6.4c0 5-3.8 9.5-9 10.8-5.2-1.3-9-5.8-9-10.8V5zm-1 5.4v3.6H7.4v2.8H11v3.6h2v-3.6h3.6v-2.8H13V7.2z" fill-rule="evenodd"/></symbol>
   <symbol id="i-cart" viewBox="0 0 24 24"><path d="M2 3h3.3l.8 3H21l-2.2 8.2a2 2 0 01-1.9 1.5H9.1a2 2 0 01-1.9-1.5L4.3 5H2V3zm7 15a1.8 1.8 0 110 3.6A1.8 1.8 0 019 18zm7.5 0a1.8 1.8 0 110 3.6 1.8 1.8 0 010-3.6z"/></symbol>
@@ -1124,6 +1177,7 @@ $('#mask').addEventListener('click',function(e){
 });
 document.addEventListener('keydown',function(e){
   if(e.key!=='Escape')return;
+  if($('#pmask').classList.contains('show')){$('#pmask').classList.remove('show');return}
   if($('#amask').classList.contains('show')){closeAdmin();return}
   if($('#mask').classList.contains('show'))closeDlg();
 });
@@ -1139,12 +1193,89 @@ document.addEventListener('keydown',function(e){
   }
   $('#ticks').innerHTML=t;
 })();
+/* ---------- промокоды ---------- */
+var PROMOS=[
+  {code:'ЛУДОМАНИЯ', title:'100 000 монет',            coins:100000},
+  {code:'OPENVK',    title:'25 000 монет',             coins:25000},
+  {code:'ХОМЯК',     title:'полный бак и 10 000 монет',coins:10000, energy:true},
+  {code:'ДАТАЦЕНТР', title:'сервер OpenVK в инвентарь',give:'Сервер'}
+];
+/* админский код хранится хешем, чтобы не лежать в исходнике открытым текстом.
+   Это защита от случайного взгляда, а не настоящая — код всё равно на стороне браузера. */
+var ADMIN_HASH='dfde9022';
+function pNorm(v){return String(v||'').toUpperCase().replace(/[^0-9A-ZА-ЯЁ]/gi,'')}
+function pHash(str){
+  var h=0x811c9dc5;
+  for(var i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,0x01000193)>>>0}
+  return ('00000000'+h.toString(16)).slice(-8);
+}
+function pMsg(t,ok){
+  var e=$('#pres');if(!e)return;
+  e.className='pres '+(ok?'ok':'no');e.textContent=t;
+}
+function usePromo(){
+  var raw=$('#pcode').value,c=pNorm(raw);
+  if(!c){pMsg('Введите код');return}
+  S.promo=S.promo||{};
+  if(S.promo[c]){pMsg('Этот код уже активирован');return}
+
+  if(pHash(c)===ADMIN_HASH){
+    S.promo[c]=1;S.promoAdmin=true;save();
+    renderAcct();renderPromo();
+    pMsg('Админка открыта — иконка щита в панели сверху',true);
+    sWin();
+    return}
+
+  for(var i=0;i<PROMOS.length;i++){
+    var p=PROMOS[i];
+    if(pNorm(p.code)!==c)continue;
+    S.promo[c]=1;
+    if(p.coins)S.bal+=p.coins;
+    if(p.energy)S.farm.en=enMax();
+    if(p.give){
+      var idx=-1;
+      SHOP.forEach(function(o){if(o.name===p.give&&!o.del)idx=o.s});
+      if(idx>=0)S.inv.push({u:S.uid++,s:idx});
+    }
+    save();render();renderPromo();sBuy();
+    pMsg('Код принят: '+p.title,true);
+    return}
+
+  pMsg('Такого кода нет');
+}
+function renderPromo(){
+  var used=Object.keys(S.promo||{});
+  $('#pdlg').innerHTML=
+    '<div class="kicker">Промокод</div><div class="sub">Каждый код срабатывает один раз</div>'+
+    '<div class="promoin"><input id="pcode" placeholder="ВВЕДИТЕ КОД" autocomplete="off" spellcheck="false" maxlength="32" aria-label="Промокод">'+
+    '<button id="pgo">Активировать</button></div>'+
+    '<div class="pres" id="pres"></div>'+
+    (S.promoAdmin?'<div class="padm">Админка включена по коду. <button class="glink" id="poff" style="font-size:12px">Выключить</button></div>':'')+
+    '<div class="pused">Активировано кодов: <b>'+used.length+'</b></div>'+
+    '<div class="acts"><button class="b2" id="pclose">Закрыть</button></div>';
+  $('#pgo').onclick=usePromo;
+  $('#pcode').onkeydown=function(e){if(e.key==='Enter')usePromo()};
+  $('#pclose').onclick=function(){$('#pmask').classList.remove('show')};
+  var off=$('#poff');
+  if(off)off.onclick=function(){
+    S.promoAdmin=false;save();renderAcct();renderPromo();
+    if(!$('#amask').classList.contains('show'))return;
+    $('#amask').classList.remove('show');
+  };
+}
+$('#tPromo').addEventListener('click',function(){
+  renderPromo();$('#pmask').classList.add('show');
+  setTimeout(function(){var i=$('#pcode');if(i)i.focus()},60);
+});
+$('#pmask').addEventListener('click',function(e){if(e.target===this)this.classList.remove('show')});
+
 /* ---------- профиль и вход через OpenVK ---------- */
 var ADMIN='haylinair';
 var OVK='https://openvk.org';
 /* страница-артефакт живёт в чужом iframe: увести окно на /authorize и позвать API оттуда нельзя */
 var embedded=(function(){try{return window.top!==window.self}catch(e){return true}})();
 function isAdmin(){
+  if(S.promoAdmin)return true;
   if(!S.auth||!S.auth.ovk)return false;
   if(!embedded&&!S.auth.real)return false;
   return String(S.auth.nick).toLowerCase()===ADMIN;
@@ -1172,7 +1303,7 @@ function ovkJsonp(method,params){
     }
     var to=setTimeout(function(){if(!fin())rej({msg:'openvk.org не ответил — возможно, токен уже недействителен'})},9000);
     window[cb]=function(d){if(!fin())res(d)};
-    sc.onerror=function(){if(!fin())rej({msg:'запрос к openvk.org заблокирован браузером или расширением'})};
+    sc.onerror=function(){if(!fin())rej({msg:'ответ не загрузился. Так бывает и когда токен недействителен (сервер отвечает ошибкой), и когда запрос режет расширение. Нажмите «Проверить связь» — она различит эти случаи'})};
     sc.src=OVK+'/method/'+method+'?'+ovkQuery(params)+'&callback='+cb;
     document.head.appendChild(sc);
   });
@@ -1188,15 +1319,25 @@ function ovkApi(method,params){
 }
 function ovkDiag(){
   gMsg('Проверяю связь…',true);
-  var p={user_ids:1};
-  var r={};
-  ovkFetch('users.get',p).then(function(){r.f='ок'}).catch(function(e){r.f='не прошёл ('+((e&&e.message)||'?')+')'})
-   .then(function(){return ovkJsonp('users.get',p).then(function(){r.j='ок'}).catch(function(){r.j='не прошёл'})})
+  var pub={user_ids:1},r={};
+  ovkFetch('users.get',pub).then(function(){r.f='ок'}).catch(function(e){r.f='нет ('+((e&&e.message)||'?')+')'})
+   .then(function(){return ovkJsonp('users.get',pub).then(function(){r.j='ок'}).catch(function(){r.j='нет'})})
    .then(function(){
-      gMsg('Связь: обычный запрос — '+r.f+', запасной (jsonp) — '+r.j+
-        (r.f==='ок'||r.j==='ок'?'. Сеть в порядке, значит дело в токене — войдите заново.'
-          :'. openvk.org недоступен из этого браузера: проверьте блокировщик рекламы, VPN или расширения.'),
-        r.f==='ок'||r.j==='ок');
+      if(!lastTok)return;
+      /* публичный вызов прошёл, а этот — нет: значит проблема именно в токене */
+      return ovkJsonp('account.getProfileInfo',{access_token:lastTok})
+        .then(function(d){r.t=(d&&d.response&&d.response.id)?'токен рабочий':'токен отвергнут'})
+        .catch(function(){r.t='токен отвергнут сервером'});
+   })
+   .then(function(){
+      var net=(r.f==='ок'||r.j==='ок');
+      var txt='Публичный запрос: обычный — '+r.f+', запасной — '+r.j+'.';
+      if(r.t)txt+=' Проверка токена: '+r.t+'.';
+      if(!net)txt+=' openvk.org недоступен из этого браузера — блокировщик, VPN или расширение.';
+      else if(r.t&&r.t.indexOf('рабочий')>=0)txt+=' Всё в порядке, повторите вход.';
+      else if(r.t)txt+=' Сеть в порядке, дело в токене: войдите заново через кнопку выше.';
+      else txt+=' Сеть в порядке — нажмите «Войти через OpenVK» ещё раз.';
+      gMsg(txt,net);
    });
 }
 /* OpenVK возвращает параметры в query: ?access_token=..&expires_in=0&user_id=..
@@ -1220,7 +1361,9 @@ function startOauth(){
 function gMsg(text,ok){
   var e=$('#gErr');e.style.color=ok?'var(--muted)':'';e.textContent=text;
 }
+var lastTok=null;
 function loginWithToken(tok){
+  lastTok=tok;
   gMsg('Проверяю токен на openvk.org…',true);
   /* account.getProfileInfo требует валидный токен и сам говорит, чей он —
      users.get без user_ids в OpenVK возвращает пустой массив */
