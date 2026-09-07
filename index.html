@@ -50,8 +50,13 @@ input{outline:none}
 .acct{position:absolute;right:0;top:2px;display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px 6px 5px 6px}
 .ava{width:28px;height:28px;border-radius:50%;background:linear-gradient(140deg,#2b2510,#191919);display:grid;place-items:center;flex:none}
 .ava svg{width:16px;height:16px}
-.nick{width:96px;background:none;border:0;font-weight:600;font-size:13px;padding:0 2px}
-.nick:hover{background:var(--panel-2);border-radius:6px}
+.nick{font-weight:600;font-size:13px;padding:0 2px;max-width:150px;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.ava.guest svg{width:17px;height:17px;fill:var(--gold)}
+.badge-admin{font-size:8.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;
+  background:#3183d8;color:#fff;border-radius:4px;padding:3px 5px 2px;flex:none}
+.glink{font-size:12.5px;color:var(--muted);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.glink:hover{color:var(--txt)}
 .bal{display:flex;align-items:center;gap:6px;background:#0e0e10;border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-variant-numeric:tabular-nums;font-weight:700;font-size:13px}
 .coin{width:15px;height:15px;flex:none}
 .topup{width:26px;height:26px;border-radius:50%;background:linear-gradient(180deg,var(--gold),var(--gold-2));color:#191400;font-weight:800;font-size:16px;line-height:1;display:grid;place-items:center;flex:none}
@@ -242,6 +247,33 @@ input{outline:none}
   .item .sell{position:static;opacity:1;transform:none;margin-top:7px}
 }
 
+/* ---------- вход и профиль ---------- */
+.gate{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:20px;
+  background:radial-gradient(900px 500px at 50% 0%,#1a1610,#08080a 70%)}
+.gate-card{width:min(370px,100%);background:linear-gradient(180deg,#17171a,#121214);
+  border:1px solid var(--line-2);border-radius:20px;padding:26px 24px 22px;text-align:center;
+  box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.glogo{width:56px;height:56px;margin:0 auto 12px;fill:var(--gold);filter:drop-shadow(0 0 18px rgba(255,210,30,.35))}
+.gate-card h2{font-family:var(--disp);font-weight:700;font-size:18px;margin:0 0 16px}
+.gtabs{display:flex;gap:3px;background:#0e0e10;border:1px solid var(--line);border-radius:11px;padding:3px;margin-bottom:14px}
+.gtab{flex:1;padding:8px;border-radius:8px;font-size:12.5px;font-weight:700;color:var(--dim);transition:.14s}
+.gtab:hover:not(.on){color:var(--muted)}
+.gtab.on{background:var(--panel-3);color:var(--txt)}
+.fld{width:100%;background:#0e0e10;border:1px solid var(--line);border-radius:11px;
+  padding:11px 13px;font-size:14px;font-weight:600;color:var(--txt);margin-bottom:9px;display:block}
+.fld:focus{border-color:rgba(255,210,30,.45)}
+.gerr{font-size:12px;color:#ff6b6b;min-height:17px;margin:2px 0 6px;line-height:1.35}
+.gerr.ok{color:var(--win)}
+.gate-card .b1{width:100%;padding:13px;border-radius:12px;font-size:13.5px;font-weight:700}
+.glink{font-size:12.5px;color:var(--muted);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.glink:hover{color:var(--txt)}
+.gnote{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:11px;color:var(--dim);line-height:1.5}
+.urow{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:11px;
+  background:var(--panel-2);border:1px solid var(--line);text-align:left;margin-bottom:14px}
+.urow .ava{width:32px;height:32px}
+.urow b{font-size:14px;display:block}
+.urow small{font-size:11px;color:var(--dim)}
+
 /* ---------- промокоды ---------- */
 .promoin{display:flex;gap:8px;margin:16px 0 4px}
 .promoin input{flex:1;min-width:0;background:#0e0e10;border:1px solid var(--line);border-radius:11px;
@@ -256,44 +288,6 @@ input{outline:none}
 .pused{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:11.5px;color:var(--dim);text-align:left}
 .pused b{color:var(--muted);font-weight:600}
 .padm{margin-top:10px;font-size:12px;color:#4a9ae8;font-weight:600}
-
-/* ---------- вход ---------- */
-.gate{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:20px;
-  background:radial-gradient(900px 500px at 50% 0%,#1a1610,#08080a 70%)}
-.gate-card{width:min(390px,100%);background:linear-gradient(180deg,#17171a,#121214);
-  border:1px solid var(--line-2);border-radius:20px;padding:30px 26px 24px;text-align:center;
-  box-shadow:0 30px 80px rgba(0,0,0,.6)}
-.glogo{width:66px;height:66px;margin:0 auto 16px}
-.gate-card h2{font-family:var(--disp);font-weight:700;font-size:19px;margin:0}
-.gate-card .gsub{font-size:12.5px;color:var(--muted);margin:6px 0 18px}
-.ovkin{display:flex;align-items:center;background:#0e0e10;border:1px solid var(--line);border-radius:11px;
-  padding:2px 4px 2px 11px;transition:.15s}
-.ovkin:focus-within{border-color:#4a9ae8;box-shadow:0 0 0 3px rgba(74,154,232,.12)}
-.ovkin span{font-size:13px;color:var(--dim);flex:none}
-.ovkin input{flex:1;min-width:0;background:none;border:0;padding:10px 6px;font-size:14px;font-weight:700;color:var(--txt)}
-.gate-card .b1{width:100%;margin-top:12px;padding:13px;border-radius:12px;font-size:13.5px;font-weight:700}
-.glink{margin-top:11px;font-size:12.5px;color:var(--muted);font-weight:600;text-decoration:underline;text-underline-offset:3px}
-.glink:hover{color:var(--txt)}
-.gnote{margin-top:18px;padding-top:15px;border-top:1px solid var(--line);font-size:11.5px;color:var(--dim);line-height:1.5}
-.gerr{margin-top:10px;font-size:12px;color:#ff6b6b;min-height:16px}
-.bovk{width:100%;display:flex;align-items:center;justify-content:center;gap:9px;padding:13px;border-radius:12px;
-  background:linear-gradient(180deg,#5aa7ee,#2a79cf);color:#fff;font-weight:700;font-size:13.5px;transition:.15s}
-.bovk:hover{filter:brightness(1.08)}
-.bovk svg{width:19px;height:19px;fill:#fff}
-.gmanual{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);text-align:left}
-.gmanual summary{cursor:pointer;font-size:12px;color:var(--muted);font-weight:600;list-style:none}
-.gmanual summary::-webkit-details-marker{display:none}
-.gmanual summary:hover{color:var(--txt)}
-.gmanual[open] summary{margin-bottom:11px}
-.ava img{width:100%;height:100%;border-radius:50%;object-fit:cover}
-a.ava{text-decoration:none}
-a.ava svg,.ava.guest svg{width:17px;height:17px;fill:#4a9ae8}
-.ava.guest svg{fill:var(--gold)}
-a.nick{text-decoration:none;color:var(--txt)}
-a.nick:hover{color:#7cb8f0;text-decoration:underline}
-span.nick,a.nick{width:auto;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 2px}
-.badge-admin{font-size:8.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;
-  background:#3183d8;color:#fff;border-radius:4px;padding:3px 5px 2px;flex:none}
 
 /* ---------- админка ---------- */
 .dlg.wide{width:min(580px,100%);text-align:left;max-height:86vh;overflow-y:auto}
@@ -416,8 +410,8 @@ img.wep{aspect-ratio:200/80;object-fit:contain}
     <button class="tool on" id="tSound" title="Звук"><svg viewBox="0 0 24 24"><use href="#i-snd"></use></svg></button>
     <button class="tool" id="tFast" title="Быстрая прокрутка"><svg viewBox="0 0 24 24"><use href="#i-bolt"></use></svg></button>
     <button class="tool" id="tAdmin" title="Админка: свои карточки" hidden><svg viewBox="0 0 24 24"><use href="#i-shield"></use></svg></button>
+    <button class="tool" id="tUser" title="Профиль"><svg viewBox="0 0 24 24"><use href="#i-user"></use></svg></button>
     <button class="tool" id="tPromo" title="Промокод"><svg viewBox="0 0 24 24"><use href="#i-ticket"></use></svg></button>
-    <button class="tool" id="tOut" title="Сменить профиль"><svg viewBox="0 0 24 24"><use href="#i-out"></use></svg></button>
     <div class="note"><b>Симулятор.</b> Монеты и предметы виртуальные, вывода нет.</div>
   </div>
 
@@ -527,26 +521,25 @@ img.wep{aspect-ratio:200/80;object-fit:contain}
 <div class="mask" id="mask"><div class="dlg" id="dlg"></div></div>
 <div class="mask" id="amask"><div class="dlg wide" id="adlg"></div></div>
 <div class="mask" id="pmask"><div class="dlg" id="pdlg"></div></div>
-<div class="toasts" id="toasts"></div>
+<div class="mask" id="umask"><div class="dlg" id="udlg"></div></div>
 <div class="gate" id="gate" hidden>
   <div class="gate-card">
-    <div class="glogo"><svg viewBox="0 0 24 24" style="width:100%;height:100%;fill:#4a9ae8"><use href="#f-ovk"></use></svg></div>
-    <h2>Вход через OpenVK</h2>
-    <div id="gOauthWrap" hidden>
-      <p class="gsub">Пароль вводится на openvk.org, сюда приходит только токен</p>
-      <button class="bovk" id="gOauth"><svg viewBox="0 0 24 24"><use href="#f-ovk"></use></svg>Войти через OpenVK</button>
+    <svg class="glogo" viewBox="0 0 48 48" aria-hidden="true"><use href="#chev"></use></svg>
+    <h2>лудОВК</h2>
+    <div class="gtabs">
+      <button class="gtab on" data-g="in">Вход</button>
+      <button class="gtab" data-g="up">Регистрация</button>
     </div>
-    <details class="gmanual" id="gManual">
-      <summary>Войти по нику, без авторизации</summary>
-      <label class="ovkin"><span>openvk.org/</span><input id="gNick" placeholder="haylinair" autocomplete="off" spellcheck="false" maxlength="64" aria-label="Ник на OpenVK"></label>
-      <button class="b1" id="gGo">Войти</button>
-    </details>
+    <input class="fld" id="gLogin" placeholder="Логин" autocomplete="username" spellcheck="false" maxlength="24">
+    <input class="fld" id="gPass" type="password" placeholder="Пароль" autocomplete="current-password" maxlength="64">
+    <input class="fld" id="gPass2" type="password" placeholder="Повторите пароль" autocomplete="new-password" maxlength="64" hidden>
     <div class="gerr" id="gErr"></div>
-    <div><button class="glink" id="gGuest">Играть без входа</button></div>
-    <div class="gnote" id="gNote"></div>
+    <button class="b1" id="gGo">Войти</button>
+    <div style="margin-top:11px"><button class="glink" id="gGuest">Играть без входа</button></div>
+    <div class="gnote">Аккаунты хранятся только в этом браузере — на другом устройстве их не будет. Игра ненастоящая, поэтому не вводите сюда пароль, которым пользуетесь где-то ещё.</div>
   </div>
 </div>
-
+<div class="toasts" id="toasts"></div>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <symbol id="chev" viewBox="0 0 48 48">
     <path d="M24 4 44 21l-6 6-14-12-14 12-6-6z"/><path d="M24 21 44 38l-6 6-14-12-14 12-6-6z"/>
@@ -568,8 +561,8 @@ img.wep{aspect-ratio:200/80;object-fit:contain}
   <symbol id="f-rack" viewBox="0 0 24 24"><path d="M3 3h18v4.6H3zm0 6.7h18v4.6H3zm0 6.7h18v4.6H3z"/></symbol>
   <symbol id="f-quantum" viewBox="0 0 24 24"><path d="M12 1.6 21.2 6.8v10.4L12 22.4 2.8 17.2V6.8zm0 6.6L8.2 10.4v4.4L12 17l3.8-2.2v-4.4z" fill-rule="evenodd"/></symbol>
   <symbol id="f-ovk" viewBox="0 0 24 24"><path d="M5.4 2h13.2A3.4 3.4 0 0122 5.4v13.2a3.4 3.4 0 01-3.4 3.4H5.4A3.4 3.4 0 012 18.6V5.4A3.4 3.4 0 015.4 2zM12 5.9c-3.4 0-5.7 2.4-5.7 6.1s2.3 6.1 5.7 6.1 5.7-2.4 5.7-6.1-2.3-6.1-5.7-6.1zm0 3.3c1.4 0 2.4 1.1 2.4 2.8s-1 2.8-2.4 2.8-2.4-1.1-2.4-2.8 1-2.8 2.4-2.8z" fill-rule="evenodd"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M12 12a5 5 0 100-10 5 5 0 000 10zm0 2c-5 0-9 2.7-9 6v2h18v-2c0-3.3-4-6-9-6z"/></symbol>
   <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M2.6 6h18.8A1.6 1.6 0 0123 7.6v2.9a2.4 2.4 0 000 4.8v2.1a1.6 1.6 0 01-1.6 1.6H2.6A1.6 1.6 0 011 17.4v-2.1a2.4 2.4 0 000-4.8V7.6A1.6 1.6 0 012.6 6zm13 2.2h1.6v2h-1.6zm0 3.8h1.6v2h-1.6zm0 3.8h1.6v2h-1.6z" fill-rule="evenodd"/></symbol>
-  <symbol id="i-out" viewBox="0 0 24 24"><path d="M11 2H5a2 2 0 00-2 2v16a2 2 0 002 2h6v-2.4H5.4V4.4H11zm4.6 4.3-1.7 1.7 2.6 2.6H8.6v2.4h7.9l-2.6 2.6 1.7 1.7L21 12z"/></symbol>
   <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 1.8 21 5v6.4c0 5-3.8 9.5-9 10.8-5.2-1.3-9-5.8-9-10.8V5zm-1 5.4v3.6H7.4v2.8H11v3.6h2v-3.6h3.6v-2.8H13V7.2z" fill-rule="evenodd"/></symbol>
   <symbol id="i-cart" viewBox="0 0 24 24"><path d="M2 3h3.3l.8 3H21l-2.2 8.2a2 2 0 01-1.9 1.5H9.1a2 2 0 01-1.9-1.5L4.3 5H2V3zm7 15a1.8 1.8 0 110 3.6A1.8 1.8 0 019 18zm7.5 0a1.8 1.8 0 110 3.6 1.8 1.8 0 010-3.6z"/></symbol>
   <symbol id="i-srch" viewBox="0 0 24 24"><path d="M10 3a7 7 0 105.3 11.6l4.6 4.6 1.4-1.4-4.6-4.6A7 7 0 0010 3zm0 2a5 5 0 110 10 5 5 0 010-10z"/></symbol>
@@ -668,12 +661,20 @@ var RAW=[
 ["★ OpenVK","Сервер","ovk",4040.00,"FN","ovk",["#5aa7ee","#2a79cf","#3183d8"]]
 ];
 var SHOP=[];
+/* карточки, которые лежат в cards.json рядом со страницей — их видят все игроки */
+var GLOBAL=[];
+var GBASE=1000,CBASE=2000;
+function mkCard(cu,idx,extra){
+  var o={s:idx,cat:cu.cat,name:cu.name,type:cu.type||'ak',price:+cu.price||0,wear:cu.wear||'FN',
+    rar:cu.rar||'mil',c:cu.c||['#4a4a55','#1a1a1f','#9a9aa5'],img:cu.img||null,del:!!cu.del};
+  if(extra)for(var k in extra)o[k]=extra[k];
+  return o;
+}
 function rebuildShop(){
-  SHOP=RAW.map(function(r,i){return{s:i,cat:r[0],name:r[1],type:r[2],price:r[3],wear:r[4],rar:r[5],c:r[6]}});
-  (S.custom||[]).forEach(function(cu,i){
-    SHOP.push({s:RAW.length+i,cat:cu.cat,name:cu.name,type:cu.type||'ak',price:cu.price,wear:cu.wear,
-      rar:cu.rar,c:cu.c||['#4a4a55','#1a1a1f','#9a9aa5'],img:cu.img||null,custom:true,del:!!cu.del});
-  });
+  SHOP=[];
+  RAW.forEach(function(r,i){SHOP[i]={s:i,cat:r[0],name:r[1],type:r[2],price:r[3],wear:r[4],rar:r[5],c:r[6]}});
+  GLOBAL.forEach(function(cu,i){SHOP[GBASE+i]=mkCard(cu,GBASE+i,{global:true})});
+  (S.custom||[]).forEach(function(cu,i){SHOP[CBASE+i]=mkCard(cu,CBASE+i,{custom:true})});
   S.inv=S.inv.filter(function(u){return SHOP[u.s]&&!SHOP[u.s].del});
   if(target!=null&&(!SHOP[target]||SHOP[target].del))target=null;
 }
@@ -700,17 +701,40 @@ var BOOST=[
 var BOOSTBY={};BOOST.forEach(function(b){BOOSTBY[b.id]=b});
 var RESTCD=86400;
 var KEY='upgrader_sim_v2';
-var S={bal:5000,nick:'Игрок',inv:[],hist:[],sound:true,fast:false,uid:1};
+var AKEY='ludovk_accounts_v1',CKEY='ludovk_current_v1',GKEY='ludovk_guest_v1';
+var ACC={},CUR=null;
+function freshState(){return {bal:5000,inv:[],hist:[],sound:true,fast:false,uid:1,
+  farm:{},custom:[],hidden:{},promo:{}}}
+var S=freshState();
 function seed(){return [38,36,35,34,33,31,30].map(function(s){return{u:S.uid++,s:s}})}
-try{var raw=localStorage.getItem(KEY); if(raw){var p=JSON.parse(raw); if(p&&p.inv){S=p}}}catch(e){}
-if(!S.inv.length&&!S.hist.length&&S.bal===5000)S.inv=seed();
-S.farm=S.farm||{};
-if(!S.farm.lv)S.farm.lv={};
-if(!S.farm.tap)S.farm.tap=1;
-if(!S.farm.total)S.farm.total=0;
-if(!S.farm.b)S.farm.b={};
-S.custom=S.custom||[];
-S.hidden=S.hidden||{};
+var STORE=(function(){try{return window.sessionStorage||null}catch(e){return null}})();
+/* приводим любое состояние — новое, из аккаунта или из старого сохранения — к рабочему виду */
+function normalizeState(){
+  if(!S.inv)S.inv=[];
+  if(!S.hist)S.hist=[];
+  if(typeof S.bal!=='number')S.bal=5000;
+  if(!S.uid)S.uid=1;
+  if(!S.inv.length&&!S.hist.length&&S.bal===5000)S.inv=seed();
+  S.farm=S.farm||{};
+  if(!S.farm.lv)S.farm.lv={};
+  if(!S.farm.tap)S.farm.tap=1;
+  if(!S.farm.total)S.farm.total=0;
+  if(!S.farm.b)S.farm.b={};
+  S.custom=S.custom||[];
+  S.hidden=S.hidden||{};
+  S.promo=S.promo||{};
+  rebuildShop();
+  /* восстановление стало способностью — возвращаем монеты за купленные уровни */
+  if(S.farm.b.reg){S.bal+=2000*(Math.pow(2.5,S.farm.b.reg)-1)/1.5;delete S.farm.b.reg}
+  delete S.farm.tank;
+  /* раньше уровни ускорений лежали по индексам массива — переносим на имена */
+  var old={'0':'cursor','1':'gpu','2':'rack','3':'super','4':'srv','5':'quantum','6':'dc'},lv={},moved=false;
+  for(var k in S.farm.lv){if(old[k]){lv[old[k]]=S.farm.lv[k];moved=true}else{lv[k]=S.farm.lv[k]}}
+  if(moved)S.farm.lv=lv;
+  if(S.farm.lv.super){S.bal+=10000*(Math.pow(1.15,S.farm.lv.super)-1)/0.15;delete S.farm.lv.super}
+  if(typeof S.farm.en!=='number')S.farm.en=enMax();
+  if(S.farm.en>enMax())S.farm.en=enMax();
+}
 function hideCard(idx,on){
   if(!on){delete S.hidden[idx];return{cnt:0,got:0}}
   S.hidden[idx]=1;
@@ -723,7 +747,6 @@ function hideCard(idx,on){
   return {cnt:cnt,got:got};
 }
 function inGame(o){return !o.del&&!S.hidden[o.s]}
-rebuildShop();
 function boostLv(id){return S.farm.b[id]||0}
 function boostCost(id){var b=BOOSTBY[id];return b.base*Math.pow(b.mul,boostLv(id))}
 function tapValue(){return 1+boostLv('tap')}
@@ -741,34 +764,16 @@ function restState(){
   if(S.farm.en>=enMax())return {on:false,cls:'wait',label:'Энергия полная'};
   return {on:true,cls:'act',label:'Восстановить'};
 }
-(function(){
-  /* восстановление стало способностью — возвращаем монеты за купленные уровни */
-  if(S.farm.b.reg){
-    S.bal+=2000*(Math.pow(2.5,S.farm.b.reg)-1)/1.5;
-    delete S.farm.b.reg;
-  }
-  delete S.farm.tank;
-})();
-if(typeof S.farm.en!=='number')S.farm.en=enMax();
-(function(){
-  /* раньше уровни лежали по индексам массива — переносим на имена */
-  var old={'0':'cursor','1':'gpu','2':'rack','3':'super','4':'srv','5':'quantum','6':'dc'},lv={},moved=false;
-  for(var k in S.farm.lv){if(old[k]){lv[old[k]]=S.farm.lv[k];moved=true}else{lv[k]=S.farm.lv[k]}}
-  if(moved)S.farm.lv=lv;
-  /* суперкомпьютер убран — возвращаем всё, что в него вложено */
-  if(S.farm.lv.super){
-    S.bal+=10000*(Math.pow(1.15,S.farm.lv.super)-1)/0.15;
-    delete S.farm.lv.super;
-  }
-})();
 function farmRate(){var r=0;FARM.forEach(function(f){r+=(S.farm.lv[f.id]||0)*f.rate});return r}
 function farmCost(id){return FARMBY[id].cost*Math.pow(1.15,S.farm.lv[id]||0)}
 var quotaWarned=false;
 function save(){
-  try{localStorage.setItem(KEY,JSON.stringify(S))}
-  catch(e){
+  try{
+    if(CUR&&ACC[CUR]){ACC[CUR].state=S;localStorage.setItem(AKEY,JSON.stringify(ACC))}
+    else if(STORE)STORE.setItem(KEY,JSON.stringify(S));
+  }catch(e){
     if(!quotaWarned){quotaWarned=true;
-      toast('Браузер не даёт сохранить: картинки заняли всё место. Удалите пару своих карточек.')}
+      toast('Браузер не даёт сохранить: место кончилось. Удалите пару своих карточек.')}
   }
 }
 
@@ -1177,6 +1182,7 @@ $('#mask').addEventListener('click',function(e){
 });
 document.addEventListener('keydown',function(e){
   if(e.key!=='Escape')return;
+  if($('#umask').classList.contains('show')){$('#umask').classList.remove('show');return}
   if($('#pmask').classList.contains('show')){$('#pmask').classList.remove('show');return}
   if($('#amask').classList.contains('show')){closeAdmin();return}
   if($('#mask').classList.contains('show'))closeDlg();
@@ -1193,6 +1199,104 @@ document.addEventListener('keydown',function(e){
   }
   $('#ticks').innerHTML=t;
 })();
+/* ---------- вход, регистрация, профиль ---------- */
+var gMode='in';
+function gErr(t,ok){var e=$('#gErr');e.className='gerr'+(ok?' ok':'');e.textContent=t}
+function setMode(m){
+  gMode=m;
+  Array.prototype.forEach.call(document.querySelectorAll('.gtab'),function(b){
+    b.classList.toggle('on',b.dataset.g===m)});
+  $('#gPass2').hidden=(m!=='up');
+  $('#gPass').autocomplete=(m==='up'?'new-password':'current-password');
+  $('#gGo').textContent=(m==='up'?'Создать аккаунт':'Войти');
+  gErr('');
+}
+function openGate(){
+  setMode('in');
+  $('#gLogin').value='';$('#gPass').value='';$('#gPass2').value='';
+  $('#gate').hidden=false;
+  setTimeout(function(){$('#gLogin').focus()},60);
+}
+function afterAuth(msg){
+  $('#gate').hidden=true;
+  try{if(STORE)STORE.removeItem(GKEY)}catch(e){}
+  save();render();renderAcct();
+  toast(msg);
+}
+function doAuth(){
+  var login=$('#gLogin').value.trim(),pw=$('#gPass').value,key=login.toLowerCase();
+  if(!/^[A-Za-zА-Яа-яЁё0-9_.\-]{2,24}$/.test(login))
+    return gErr('Логин: от 2 до 24 символов — буквы, цифры, точка, дефис, подчёркивание');
+  if(pw.length<3)return gErr('Пароль минимум 3 символа');
+  if(gMode==='up'){
+    if(ACC[key])return gErr('Такой логин уже занят');
+    if(pw!==$('#gPass2').value)return gErr('Пароли не совпадают');
+    var salt=mkSalt();
+    /* прогресс, набитый до регистрации, переносим в новый аккаунт */
+    ACC[key]={login:login,salt:salt,hash:hashPw(pw,salt),admin:false,state:S,made:Date.now()};
+    CUR=key;try{localStorage.setItem(CKEY,CUR)}catch(e){}
+    saveAcc();afterAuth('Аккаунт «'+esc(login)+'» создан, прогресс сохраняется');
+  }else{
+    var a=ACC[key];
+    if(!a)return gErr('Аккаунт не найден. Проверьте логин или зарегистрируйтесь');
+    if(hashPw(pw,a.salt)!==a.hash)return gErr('Неверный пароль');
+    CUR=key;try{localStorage.setItem(CKEY,CUR)}catch(e){}
+    S=a.state||freshState();normalizeState();
+    sel.clear();target=null;useBal=0;
+    afterAuth('С возвращением, '+esc(a.login));
+  }
+}
+function logout(){
+  save();
+  CUR=null;try{localStorage.removeItem(CKEY)}catch(e){}
+  try{if(STORE){STORE.removeItem(KEY);STORE.removeItem(GKEY)}}catch(e){}
+  S=freshState();normalizeState();
+  sel.clear();target=null;useBal=0;
+  $('#umask').classList.remove('show');
+  render();renderAcct();openGate();
+}
+function uMsg(t,ok){var e=$('#uErr');if(e){e.className='gerr'+(ok?' ok':'');e.textContent=t}}
+function changePw(){
+  var a=curAcc();if(!a)return;
+  var o=$('#uOld').value,n1=$('#uNew').value,n2=$('#uNew2').value;
+  if(hashPw(o,a.salt)!==a.hash)return uMsg('Текущий пароль неверный');
+  if(n1.length<3)return uMsg('Новый пароль минимум 3 символа');
+  if(n1!==n2)return uMsg('Новые пароли не совпадают');
+  a.salt=mkSalt();a.hash=hashPw(n1,a.salt);saveAcc();
+  $('#uOld').value='';$('#uNew').value='';$('#uNew2').value='';
+  uMsg('Пароль изменён',true);
+}
+function openUser(){
+  var a=curAcc();
+  if(!a){openGate();return}
+  $('#udlg').innerHTML=
+    '<div class="kicker">Профиль</div>'+
+    '<div class="urow" style="margin-top:16px"><span class="ava guest"><svg viewBox="0 0 48 48"><use href="#chev"></use></svg></span>'+
+      '<span><b>'+esc(a.login)+'</b><small>'+(a.admin?'администратор':'игрок')+' · прогресс сохраняется</small></span></div>'+
+    '<div style="text-align:left;font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--dim);margin-bottom:8px">Смена пароля</div>'+
+    '<input class="fld" id="uOld" type="password" placeholder="Текущий пароль" maxlength="64">'+
+    '<input class="fld" id="uNew" type="password" placeholder="Новый пароль" maxlength="64">'+
+    '<input class="fld" id="uNew2" type="password" placeholder="Повторите новый" maxlength="64">'+
+    '<div class="gerr" id="uErr"></div>'+
+    '<button class="b1" id="uSave" style="width:100%;padding:12px;border-radius:11px;font-weight:700">Сменить пароль</button>'+
+    '<div class="acts"><button class="b2" id="uOut">Выйти из аккаунта</button><button class="b2" id="uClose">Закрыть</button></div>';
+  $('#uSave').onclick=changePw;
+  $('#uOut').onclick=logout;
+  $('#uClose').onclick=function(){$('#umask').classList.remove('show')};
+  $('#umask').classList.add('show');
+}
+$('#gGo').addEventListener('click',doAuth);
+Array.prototype.forEach.call(document.querySelectorAll('.gtab'),function(b){
+  b.addEventListener('click',function(){setMode(this.dataset.g)})});
+['gLogin','gPass','gPass2'].forEach(function(id){
+  $('#'+id).addEventListener('keydown',function(e){if(e.key==='Enter')doAuth()})});
+$('#gGuest').addEventListener('click',function(){
+  try{if(STORE)STORE.setItem(GKEY,'1')}catch(e){}
+  $('#gate').hidden=true;
+});
+$('#tUser').addEventListener('click',openUser);
+$('#umask').addEventListener('click',function(e){if(e.target===this)this.classList.remove('show')});
+
 /* ---------- промокоды ---------- */
 var PROMOS=[
   {code:'ЛУДОМАНИЯ', title:'100 000 монет',            coins:100000},
@@ -1202,8 +1306,8 @@ var PROMOS=[
 ];
 /* админский код хранится хешем, чтобы не лежать в исходнике открытым текстом.
    Это защита от случайного взгляда, а не настоящая — код всё равно на стороне браузера. */
-var ADMIN_HASH='dfde9022';
-function pNorm(v){return String(v||'').toUpperCase().replace(/[^0-9A-ZА-ЯЁ]/gi,'')}
+var ADMIN_HASH='e9d5212a';
+function pNorm(v){return String(v||'').trim().toUpperCase().replace(/\s+/g,'')}
 function pHash(str){
   var h=0x811c9dc5;
   for(var i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,0x01000193)>>>0}
@@ -1269,133 +1373,40 @@ $('#tPromo').addEventListener('click',function(){
 });
 $('#pmask').addEventListener('click',function(e){if(e.target===this)this.classList.remove('show')});
 
-/* ---------- профиль и вход через OpenVK ---------- */
-var ADMIN='haylinair';
-var OVK='https://openvk.org';
-/* страница-артефакт живёт в чужом iframe: увести окно на /authorize и позвать API оттуда нельзя */
-var embedded=(function(){try{return window.top!==window.self}catch(e){return true}})();
-function isAdmin(){
-  if(S.promoAdmin)return true;
-  if(!S.auth||!S.auth.ovk)return false;
-  if(!embedded&&!S.auth.real)return false;
-  return String(S.auth.nick).toLowerCase()===ADMIN;
+/* ---------- аккаунты ---------- */
+/* Всё лежит в localStorage этого браузера: пароль хранится солёным хешем,
+   но код исполняется у игрока, так что это профиль в игре, а не настоящая защита. */
+function loadAcc(){try{return JSON.parse(localStorage.getItem(AKEY))||{}}catch(e){return {}}}
+function saveAcc(){try{localStorage.setItem(AKEY,JSON.stringify(ACC))}catch(e){
+  toast('Браузер не даёт сохранить аккаунты — кончилось место')}}
+function mkSalt(){
+  try{
+    var a=new Uint8Array(8);crypto.getRandomValues(a);
+    return Array.prototype.map.call(a,function(x){return ('0'+x.toString(16)).slice(-2)}).join('');
+  }catch(e){return (Math.random()+'.'+Date.now()).slice(2,18)}
 }
-function ovkQuery(params,extra){
-  var q=[];
-  for(var k in params)if(params[k]!=null)q.push(encodeURIComponent(k)+'='+encodeURIComponent(params[k]));
-  q.push('v=5.131');
-  if(extra)q.push(extra);
-  return q.join('&');
-}
-function ovkFetch(method,params,extra){
-  return fetch(OVK+'/method/'+method+'?'+ovkQuery(params,extra)).then(function(r){return r.json()});
-}
-var jsonpN=0;
-/* запасной транспорт: ответ приезжает обычным <script>, поэтому CORS вообще не участвует */
-function ovkJsonp(method,params){
-  return new Promise(function(res,rej){
-    var cb='ovkcb'+(++jsonpN),sc=document.createElement('script'),done=false;
-    function fin(){
-      if(done)return true;done=true;clearTimeout(to);
-      try{delete window[cb]}catch(e){window[cb]=undefined}
-      if(sc.parentNode)sc.parentNode.removeChild(sc);
-      return false;
+function hashPw(pw,salt){
+  var str=salt+'\u0001'+String(pw)+'\u0001ludovk';
+  var a=0x811c9dc5,b=0x01000193,c=0x9e3779b9,d=0x85ebca6b;
+  for(var r=0;r<600;r++){
+    for(var i=0;i<str.length;i++){
+      var ch=str.charCodeAt(i);
+      a=Math.imul(a^ch,0x01000193)>>>0;
+      b=Math.imul(b+ch,0x85ebca6b)>>>0;
+      c=(c^Math.imul(ch+r,0xc2b2ae35))>>>0;
+      d=Math.imul(d^(a+b),0x27d4eb2f)>>>0;
     }
-    var to=setTimeout(function(){if(!fin())rej({msg:'openvk.org не ответил — возможно, токен уже недействителен'})},9000);
-    window[cb]=function(d){if(!fin())res(d)};
-    sc.onerror=function(){if(!fin())rej({msg:'ответ не загрузился. Так бывает и когда токен недействителен (сервер отвечает ошибкой), и когда запрос режет расширение. Нажмите «Проверить связь» — она различит эти случаи'})};
-    sc.src=OVK+'/method/'+method+'?'+ovkQuery(params)+'&callback='+cb;
-    document.head.appendChild(sc);
-  });
-}
-function ovkApi(method,params){
-  return ovkFetch(method,params)
-    .catch(function(){
-      /* OpenVK строит Access-Control-Allow-Origin как схема://хост и теряет порт */
-      if(location.port)return ovkFetch(method,params,'requestPort='+encodeURIComponent(location.port));
-      throw 0;
-    })
-    .catch(function(){return ovkJsonp(method,params)});
-}
-function ovkDiag(){
-  gMsg('Проверяю связь…',true);
-  var pub={user_ids:1},r={};
-  ovkFetch('users.get',pub).then(function(){r.f='ок'}).catch(function(e){r.f='нет ('+((e&&e.message)||'?')+')'})
-   .then(function(){return ovkJsonp('users.get',pub).then(function(){r.j='ок'}).catch(function(){r.j='нет'})})
-   .then(function(){
-      if(!lastTok)return;
-      /* публичный вызов прошёл, а этот — нет: значит проблема именно в токене */
-      return ovkJsonp('account.getProfileInfo',{access_token:lastTok})
-        .then(function(d){r.t=(d&&d.response&&d.response.id)?'токен рабочий':'токен отвергнут'})
-        .catch(function(){r.t='токен отвергнут сервером'});
-   })
-   .then(function(){
-      var net=(r.f==='ок'||r.j==='ок');
-      var txt='Публичный запрос: обычный — '+r.f+', запасной — '+r.j+'.';
-      if(r.t)txt+=' Проверка токена: '+r.t+'.';
-      if(!net)txt+=' openvk.org недоступен из этого браузера — блокировщик, VPN или расширение.';
-      else if(r.t&&r.t.indexOf('рабочий')>=0)txt+=' Всё в порядке, повторите вход.';
-      else if(r.t)txt+=' Сеть в порядке, дело в токене: войдите заново через кнопку выше.';
-      else txt+=' Сеть в порядке — нажмите «Войти через OpenVK» ещё раз.';
-      gMsg(txt,net);
-   });
-}
-/* OpenVK возвращает параметры в query: ?access_token=..&expires_in=0&user_id=..
-   при отказе: ?error=access_denied&error_reason=..&error_description=.. */
-function grabAuth(){
-  var q=String(location.search||'').replace(/^\?/,'')+'&'+String(location.hash||'').replace(/^#/,'');
-  function get(k){
-    var m=new RegExp('(?:^|&)'+k+'=([^&]*)').exec(q);
-    return m?decodeURIComponent(m[1].replace(/\+/g,' ')):null;
+    a=(a^(a>>>15))>>>0;b=(b^(b>>>13))>>>0;c=(c^(c>>>16))>>>0;d=(d^(d>>>11))>>>0;
   }
-  return {token:get('access_token'),uid:get('user_id'),err:get('error'),desc:get('error_description')};
+  return [a,b,c,d].map(function(x){return ('00000000'+x.toString(16)).slice(-8)}).join('');
 }
-function cleanUrl(){
-  try{history.replaceState(null,'',location.pathname)}catch(e){}
-}
-function startOauth(){
-  var back=location.origin+location.pathname;
-  location.href=OVK+'/authorize?client_name='+encodeURIComponent('ludOVK')+
-    '&redirect_uri='+encodeURIComponent(back)+'&display=page&response_type=token&revoke=0';
-}
-function gMsg(text,ok){
-  var e=$('#gErr');e.style.color=ok?'var(--muted)':'';e.textContent=text;
-}
-var lastTok=null;
-function loginWithToken(tok){
-  lastTok=tok;
-  gMsg('Проверяю токен на openvk.org…',true);
-  /* account.getProfileInfo требует валидный токен и сам говорит, чей он —
-     users.get без user_ids в OpenVK возвращает пустой массив */
-  ovkApi('account.getProfileInfo',{access_token:tok}).then(function(res){
-    if(res&&res.error_code)throw {msg:res.error_msg||('код '+res.error_code)};
-    var u=res&&res.response;
-    if(!u||!u.id)throw {msg:'неожиданный ответ, в нём нет профиля'};
-    S.tok=tok;
-    S.auth={nick:u.screen_name||('id'+u.id),id:u.id,ovk:true,real:true,
-            name:((u.first_name||'')+' '+(u.last_name||'')).trim(),photo:u.photo_200||null};
-    save();$('#gate').hidden=true;renderAcct();
-    toast('Вход выполнен: '+esc(S.auth.name||S.auth.nick)+(isAdmin()?'. Админка открыта — иконка щита.':''));
-  }).catch(function(e){
-    gMsg(e&&e.msg?('OpenVK: '+e.msg)
-      :'Не удалось связаться с openvk.org ни обычным запросом, ни через jsonp.');
-    var d=document.createElement('button');
-    d.className='glink';d.style.marginTop='8px';d.textContent='Проверить связь с openvk.org';
-    d.onclick=ovkDiag;
-    $('#gErr').appendChild(document.createElement('br'));
-    $('#gErr').appendChild(d);
-  });
-}
-function ovkUrl(nick){return 'https://openvk.org/'+encodeURIComponent(nick)}
+function curAcc(){return CUR&&ACC[CUR]?ACC[CUR]:null}
+function isAdmin(){var a=curAcc();return !!((a&&a.admin)||S.promoAdmin)}
 function renderAcct(){
-  var a=S.auth||{nick:'Гость',ovk:false},u=ovkUrl(a.nick);
+  var a=curAcc();
   $('#acct').innerHTML=
-    (a.ovk
-      ?'<a class="ava" href="'+u+'" target="_blank" rel="noopener noreferrer" title="Страница на OpenVK">'+
-        (a.photo?'<img src="'+esc(a.photo)+'" alt="">':'<svg viewBox="0 0 24 24"><use href="#f-ovk"></use></svg>')+'</a>'+
-       '<a class="nick" href="'+u+'" target="_blank" rel="noopener noreferrer">'+esc(a.nick)+'</a>'
-      :'<span class="ava guest"><svg viewBox="0 0 48 48"><use href="#chev"></use></svg></span>'+
-       '<span class="nick">'+esc(a.nick)+'</span>')+
+    '<span class="ava guest"><svg viewBox="0 0 48 48"><use href="#chev"></use></svg></span>'+
+    '<span class="nick">'+esc(a?a.login:'Гость')+'</span>'+
     (isAdmin()?'<span class="badge-admin">админ</span>':'')+
     '<div class="bal"><svg class="coin" viewBox="0 0 24 24"><use href="#coin"></use></svg><b id="balv">'+fmt(S.bal)+'</b></div>'+
     (isAdmin()?'<button class="topup" id="topup" title="Админское пополнение: 10 000 монет">+</button>':'');
@@ -1403,41 +1414,6 @@ function renderAcct(){
   if(tu)tu.onclick=function(){S.bal+=10000;sBuy();renderBal();renderInv();renderWheel();save()};
   $('#tAdmin').hidden=!isAdmin();
 }
-function parseNick(v){
-  v=String(v||'').trim();
-  var m=v.match(/openvk\.[a-z]+\/([^/?#\s]+)/i);
-  if(m)v=m[1];
-  v=v.replace(/^@/,'').replace(/^\/+/,'').replace(/\/+$/,'');
-  return /^[A-Za-z0-9_.\-]{2,32}$/.test(v)?v:null;
-}
-function setupGate(){
-  $('#gOauthWrap').hidden=embedded;
-  $('#gManual').open=embedded;
-}
-function openGate(){
-  gMsg('',true);
-  $('#gNick').value=(S.auth&&S.auth.ovk&&!S.auth.real)?S.auth.nick:'';
-  setupGate();
-  $('#gate').hidden=false;
-  if(embedded)setTimeout(function(){$('#gNick').focus()},50);
-}
-function doLogin(){
-  var nick=parseNick($('#gNick').value);
-  if(!nick){gMsg('Ник из латиницы, цифр, точки, дефиса или подчёркивания — от 2 до 32 символов');return}
-  S.auth={nick:nick,ovk:true};save();
-  $('#gate').hidden=true;renderAcct();
-  toast('С возвращением, '+esc(nick)+(isAdmin()?'. Админка открыта — иконка щита.':''));
-}
-$('#gGo').addEventListener('click',doLogin);
-$('#gOauth').addEventListener('click',startOauth);
-$('#gNote').innerHTML=embedded
-  ?'Настоящая авторизация OpenVK здесь невозможна: страница открыта внутри песочницы claude.ai, а она блокирует и переход на openvk.org/authorize, и вызовы к API. Ник ниже — просто подпись профиля и ссылка на вашу страницу, паролей она не спрашивает.<br><br>Файл этой страницы работает и на своём хостинге — там кнопка настоящего входа включается сама.'
-  :'Откроется openvk.org/authorize — пароль вы вводите на самом OpenVK, сюда вернётся только токен. Он хранится в вашем браузере и уходит исключительно на openvk.org. Работает, когда страница открыта с сайта по https.';
-$('#gNick').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin()});
-$('#gGuest').addEventListener('click',function(){
-  S.auth={nick:'Гость',ovk:false};save();$('#gate').hidden=true;renderAcct();
-});
-$('#tOut').addEventListener('click',function(){S.tok=null;save();openGate()});
 
 /* ---------- админка: свои карточки ---------- */
 var aImg=null;
@@ -1471,13 +1447,20 @@ function readImage(file,cb){
   };
   fr.readAsDataURL(file);
 }
+function renderJson(){
+  var t=$('#aJson');if(!t)return;
+  var cards=S.custom.filter(function(c){return !c.del}).map(function(c){
+    return {cat:c.cat,name:c.name,price:c.price,wear:c.wear,rar:c.rar,type:c.type,c:c.c,img:c.img||null};
+  });
+  t.value=JSON.stringify({cards:cards},null,1);
+}
 function renderAdminList(){
   var l=$('#aList');if(!l)return;
   var live=[];
   S.custom.forEach(function(c,i){if(!c.del)live.push(i)});
   if(!live.length){l.innerHTML='<div class="aempty">Пока ничего не залито. Заполните форму сверху — карточка появится в магазине и в списке «Прокачать до».</div>';return}
   l.innerHTML='<div class="asec">Залито: '+live.length+'</div>'+live.map(function(i){
-    var o=SHOP[RAW.length+i];
+    var o=SHOP[CBASE+i];
     return '<div class="arow2">'+wep(o)+'<div class="an"><b>'+esc(o.name)+'</b>'+
       '<small>'+esc(o.cat)+' · '+fmt(o.price)+'</small></div>'+
       '<button class="adel" data-del="'+i+'">Удалить насовсем</button></div>';
@@ -1510,7 +1493,7 @@ function bulkHide(on){
 }
 function closeAdmin(){$('#amask').classList.remove('show')}
 function openAdmin(){
-  if(!isAdmin()){toast('Админка только для страницы openvk.org/'+ADMIN);return}
+  if(!isAdmin()){toast('Админка открывается промокодом');return}
   var wears=['FN','MW','FT','WW','BS'];
   $('#adlg').innerHTML=
     '<div class="ahead"><div class="kicker">Свои карточки</div><button class="x2" id="aClose" aria-label="Закрыть">×</button></div>'+
@@ -1530,6 +1513,13 @@ function openAdmin(){
     '<div class="apreview" id="aPrev"></div>'+
     '<button class="b1" id="aAdd" style="width:100%;padding:13px;border-radius:12px;font-size:13.5px">Добавить карточку</button>'+
     '<div class="alist" id="aList"></div>'+
+    '<div class="alist"><div class="asec">Показать карточки всем игрокам</div>'+
+      '<div class="hint2" style="font-size:11.5px;color:var(--dim);margin-bottom:9px">Свои карточки видит только этот браузер. '+
+      'Чтобы их видели все, положите рядом с index.html файл <b>cards.json</b> — страница подхватит его сама.</div>'+
+      '<textarea id="aJson" class="fld" readonly style="height:104px;font-family:ui-monospace,Menlo,Consolas,monospace;'+
+      'font-size:11px;font-weight:400;resize:vertical;letter-spacing:0"></textarea>'+
+      '<div style="display:flex;gap:8px"><button class="mini" id="aCopy">Скопировать</button>'+
+      '<button class="mini" id="aDl">Скачать cards.json</button></div></div>'+
     '<div class="alist"><div class="asec">Карточки в игре<span class="acount" id="aCount">0</span></div>'+
       '<div class="atools"><input id="aq" placeholder="Поиск по названию"><button class="mini" id="aHideAll">Убрать все</button>'+
       '<button class="mini" id="aShowAll">Вернуть все</button></div>'+
@@ -1560,8 +1550,8 @@ function openAdmin(){
     rebuildShop();save();
     aImg=null;$('#aFile').value='';$('#aName').value='';$('#aPrice').value='';
     $('#aFileName').textContent='PNG или JPG. Уменьшу до 300×120 и сохраню в этом браузере.';
-    aPreview();renderAdminList();renderCards();render();
-    toast('Карточка «'+esc(d.name)+'» теперь в игре');
+    aPreview();renderAdminList();renderCards();renderJson();render();
+    toast('Карточка «'+esc(d.name)+'» добавлена. Чтобы её видели все — обновите cards.json внизу окна');
   };
   $('#aq').oninput=renderCards;
   $('#aHideAll').onclick=function(){bulkHide(true)};
@@ -1579,15 +1569,64 @@ function openAdmin(){
     var i=+b.dataset.del;
     if(!S.custom[i])return;
     S.custom[i].del=true;S.custom[i].img=null;
-    delete S.hidden[RAW.length+i];
-    rebuildShop();save();renderAdminList();renderCards();render();
+    delete S.hidden[CBASE+i];
+    rebuildShop();save();renderAdminList();renderCards();renderJson();render();
     toast('Карточка удалена из игры');
   };
-  aPreview();renderAdminList();renderCards();
+  $('#aCopy').onclick=function(){
+    var t=$('#aJson');t.select();
+    var ok=false;try{ok=document.execCommand('copy')}catch(e){}
+    toast(ok?'JSON скопирован — сохраните его как cards.json':'Не вышло скопировать, выделите текст вручную');
+  };
+  /* в песочнице claude.ai скачивание файлов запрещено — там оставляем только копирование */
+  try{if(window.top!==window.self)$('#aDl').hidden=true}catch(e){$('#aDl').hidden=true}
+  $('#aDl').onclick=function(){
+    try{
+      var b=new Blob([$('#aJson').value],{type:'application/json'});
+      var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='cards.json';
+      document.body.appendChild(a);a.click();
+      setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},400);
+    }catch(e){toast('Скачивание заблокировано — скопируйте текст кнопкой рядом')}
+  };
+  aPreview();renderAdminList();renderCards();renderJson();
   $('#amask').classList.add('show');
 }
 $('#tAdmin').addEventListener('click',openAdmin);
 $('#amask').addEventListener('click',function(e){if(e.target===this)closeAdmin()});
+
+/* карточки сайта: лежат в cards.json рядом с index.html, поэтому видны всем */
+(function(){
+  try{
+    fetch('cards.json',{cache:'no-store'})
+      .then(function(r){return r.ok?r.json():null})
+      .then(function(d){
+        if(!d)return;
+        var arr=Array.isArray(d)?d:(d.cards||[]);
+        if(!arr.length)return;
+        GLOBAL=arr.filter(function(c){return c&&c.name&&+c.price>0});
+        rebuildShop();render();
+      })
+      .catch(function(){});
+  }catch(e){}
+})();
+
+/* ---------- запуск: аккаунты и состояние ---------- */
+(function(){
+  ACC=loadAcc();
+  if(!ACC.admin){
+    var st=mkSalt();
+    ACC.admin={login:'Admin',salt:st,hash:hashPw('admin',st),admin:true,state:null,made:Date.now()};
+    saveAcc();
+  }
+  try{CUR=localStorage.getItem(CKEY)||null}catch(e){}
+  if(CUR&&!ACC[CUR])CUR=null;
+  if(CUR&&ACC[CUR].state){S=ACC[CUR].state}
+  else if(!CUR){
+    try{var r=STORE&&STORE.getItem(KEY);if(r){var q=JSON.parse(r);if(q&&q.inv)S=q}}catch(e){}
+  }
+  normalizeState();
+  try{localStorage.removeItem(KEY)}catch(e){}
+})();
 
 (function(){
   var r=farmRate();
@@ -1615,19 +1654,11 @@ setInterval(function(){
 },250);
 window.addEventListener('beforeunload',function(){S.farm.last=Date.now();save()});
 renderAcct();
-(function(){
-  var a=grabAuth();
-  if(!embedded&&(a.token||a.err)){
-    cleanUrl();setupGate();$('#gate').hidden=false;
-    if(a.err){
-      gMsg(a.err==='access_denied'
-        ?'Доступ не выдан — на openvk.org была нажата «Отклонить»'
-        :('OpenVK ответил: '+(a.desc||a.err)));
-      return}
-    loginWithToken(a.token);
-    return}
-  if(!S.auth)openGate();
-})();
+if(!CUR){
+  var guested=false;
+  try{guested=!!(STORE&&STORE.getItem(GKEY))}catch(e){}
+  if(!guested)openGate();
+}
 $('#tSound').classList.toggle('on',!!S.sound);
 $('#tFast').classList.toggle('on',!!S.fast);
 render();
