@@ -1149,21 +1149,55 @@ function isAdmin(){
   if(!embedded&&!S.auth.real)return false;
   return String(S.auth.nick).toLowerCase()===ADMIN;
 }
-function ovkCall(method,params,extra){
+function ovkQuery(params,extra){
   var q=[];
-  for(var k in params)q.push(encodeURIComponent(k)+'='+encodeURIComponent(params[k]));
+  for(var k in params)if(params[k]!=null)q.push(encodeURIComponent(k)+'='+encodeURIComponent(params[k]));
   q.push('v=5.131');
   if(extra)q.push(extra);
-  return fetch(OVK+'/method/'+method+'?'+q.join('&')).then(function(r){return r.json()});
+  return q.join('&');
+}
+function ovkFetch(method,params,extra){
+  return fetch(OVK+'/method/'+method+'?'+ovkQuery(params,extra)).then(function(r){return r.json()});
+}
+var jsonpN=0;
+/* запасной транспорт: ответ приезжает обычным <script>, поэтому CORS вообще не участвует */
+function ovkJsonp(method,params){
+  return new Promise(function(res,rej){
+    var cb='ovkcb'+(++jsonpN),sc=document.createElement('script'),done=false;
+    function fin(){
+      if(done)return true;done=true;clearTimeout(to);
+      try{delete window[cb]}catch(e){window[cb]=undefined}
+      if(sc.parentNode)sc.parentNode.removeChild(sc);
+      return false;
+    }
+    var to=setTimeout(function(){if(!fin())rej({msg:'openvk.org не ответил — возможно, токен уже недействителен'})},9000);
+    window[cb]=function(d){if(!fin())res(d)};
+    sc.onerror=function(){if(!fin())rej({msg:'запрос к openvk.org заблокирован браузером или расширением'})};
+    sc.src=OVK+'/method/'+method+'?'+ovkQuery(params)+'&callback='+cb;
+    document.head.appendChild(sc);
+  });
 }
 function ovkApi(method,params){
-  return ovkCall(method,params).catch(function(e){
-    /* OpenVK собирает Access-Control-Allow-Origin как схема://хост и теряет порт.
-       Для нестандартного порта его возвращает requestPort — но если браузер не шлёт
-       Referer, тот же параметр портит заголовок до "*:порт". Поэтому только повтором. */
-    if(!location.port)throw e;
-    return ovkCall(method,params,'requestPort='+encodeURIComponent(location.port));
-  });
+  return ovkFetch(method,params)
+    .catch(function(){
+      /* OpenVK строит Access-Control-Allow-Origin как схема://хост и теряет порт */
+      if(location.port)return ovkFetch(method,params,'requestPort='+encodeURIComponent(location.port));
+      throw 0;
+    })
+    .catch(function(){return ovkJsonp(method,params)});
+}
+function ovkDiag(){
+  gMsg('Проверяю связь…',true);
+  var p={user_ids:1};
+  var r={};
+  ovkFetch('users.get',p).then(function(){r.f='ок'}).catch(function(e){r.f='не прошёл ('+((e&&e.message)||'?')+')'})
+   .then(function(){return ovkJsonp('users.get',p).then(function(){r.j='ок'}).catch(function(){r.j='не прошёл'})})
+   .then(function(){
+      gMsg('Связь: обычный запрос — '+r.f+', запасной (jsonp) — '+r.j+
+        (r.f==='ок'||r.j==='ок'?'. Сеть в порядке, значит дело в токене — войдите заново.'
+          :'. openvk.org недоступен из этого браузера: проверьте блокировщик рекламы, VPN или расширения.'),
+        r.f==='ок'||r.j==='ок');
+   });
 }
 /* OpenVK возвращает параметры в query: ?access_token=..&expires_in=0&user_id=..
    при отказе: ?error=access_denied&error_reason=..&error_description=.. */
@@ -1200,8 +1234,13 @@ function loginWithToken(tok){
     save();$('#gate').hidden=true;renderAcct();
     toast('Вход выполнен: '+esc(S.auth.name||S.auth.nick)+(isAdmin()?'. Админка открыта — иконка щита.':''));
   }).catch(function(e){
-    gMsg(e&&e.msg?('OpenVK ответил: '+e.msg)
-      :'Не удалось связаться с openvk.org. Страница должна быть открыта по https с сайта, а не файлом с диска.');
+    gMsg(e&&e.msg?('OpenVK: '+e.msg)
+      :'Не удалось связаться с openvk.org ни обычным запросом, ни через jsonp.');
+    var d=document.createElement('button');
+    d.className='glink';d.style.marginTop='8px';d.textContent='Проверить связь с openvk.org';
+    d.onclick=ovkDiag;
+    $('#gErr').appendChild(document.createElement('br'));
+    $('#gErr').appendChild(d);
   });
 }
 function ovkUrl(nick){return 'https://openvk.org/'+encodeURIComponent(nick)}
